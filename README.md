@@ -3,6 +3,7 @@
 Wireless Network Pattern Classifier is a data processing software use to estimate a wireless network congestion and traffic by using a Random Forest Classifier as a supervised learning to let the machine automatically generate out a result.
 
 This application is an enhancement application for Wireless Network Analyzer project from: https://github.com/GuytChome/WNA.
+
 A RFC script we use in this application comes from: https://github.com/jessfraz/random-forest-classifier
 
 
