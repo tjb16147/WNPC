@@ -1,35 +1,36 @@
 //main RFC function.
 
-
-
+//This line use to declare that this whole script is exported to use in another script (main.js)
 var RFC = function RFC() {
 
-//start stopwatch
+
+//********************Variable segments*******************************************************************************
+
 console.log("Start Random Forest Classifier: \n");
+
+//variable for stopwatch function.
 var start = new Date();
 var hrstart = process.hrtime();
 
 
+//variable for RFC function.
 var fs = require('fs'),
     RandomForestClassifier = require('random-forest-classifier').RandomForestClassifier;
 
 
-//1.data that want to be sampled.
+/*
+Import 3 data from different path
+1.subtype = data that need to be observed.
+2.training data = data set uses for prediction.
+3.Throughput data use to calcuate for congestion.
+*/
+
 var testdata=require('./data/json/subtype.json');
-
-//2.training data use for prediction.
 var data = require('./data/json/trainingdata.json');
-
-//3.Throughput data use to calculate for a throughput
 var tdata = require('./data/json/throughputdata.json');
 
 
-
-
-//count number of entry to forward to estimators (JSON)
-var count = Object.keys(testdata).length;
-
-//************************Throughput estimation function*********************
+//************************Throughput estimation function**************************************************************
 
 function throughput() {
 //convert from string to number
@@ -37,89 +38,81 @@ var mnt = Number(tdata[0].count);
 var ctrl = Number(tdata[1].count);
 var dat = Number(tdata[2].count);
 
-var congest_result = dat/(mnt+ctrl+dat);
 
+//calculation part, generate result in 3 decimals.
+var congest_result = dat/(mnt+ctrl+dat);
 var through = congest_result.toFixed(3);
 
 
 console.log("Throughput of the network is:  %d \n",through);
-
 if(through<0.1)
 {
-console.log("data congestion: Low \n");
+console.log("Congestion result: Low \n");
 }
 
 if(through>0.5)
 {
-console.log("data congestion: High \n");
+console.log("Congestion result: High \n");
 }
-
-
 
 if(through>0.1&&through<0.5)
 {
-console.log("data congestion: Moderate \n");
+console.log("Congestion result: Moderate \n");
 }
 
 
 }
 
 
-//********************************************************************************
+//***************************Core function, RFC***********************************************************************
+
+//count data set amount of the input.
+var count = Object.keys(testdata).length;
 
 
-
-//***************************Core function, RFC******************************************************
+//function to construct trees
 var rf = new RandomForestClassifier({
-
-//maximum number of entry available in the field,
-//one tree per entry
+//maximum number of entry available in the field, one tree per entry
     n_estimators: count
 });
 
 
-//determine a column that need to be predicted as a result. In this case, we named it "Traffic"
-
-//rf.fit(data, features, target, function(err, trees){})
-
-/*
-
-data = input data
-feature, default =null, else declare array
-target, what to observe
-
-
+/* default codeline with explaination for further modification.
+rf.fit(data, features, target, function(err, trees){})
+data = input data.
+feature = attribute we want to put in. default = use every attribute to construct RFC.
+target= class we want to observe.
 */
 
+
+//We pick all attributes that are mainly affected a network pattern based on our experiment. If we want more or less attributes, we can modify on this array.
 const feature = ["Probe Request","Probe Response","Beacon","RTS","CTS","ACK","Data","QoS data"]
+//const feature = null;
 
-
+//function to construct a forest
   rf.fit(data, feature, "Traffic", function(err, trees){
 
 
-
-  //console.log(JSON.stringify(trees, null, 4));
+//Generate result.
   var pred = rf.predict(testdata, trees);
 
 
-//********************print prediction result to console************************
+//print out result to a console.
 
-//count unit in prediction. (count array)
 console.log("number of trees:   "+pred.length+"\n");
-console.log("prediction result: \n");
-//check loop c-1 or c from 1 to 10
+console.log("prediction result on each frame: \n");
+
+//check loop c-1 or c from 1 to 10, count unit in prediction. (count array)
+// this function is implemented to use in acurracy test.
 for(var c=1; c<=count;c++)
 {
-console.log(c+". "+pred[c-1]+"\n");
+console.log(c+". "+pred[c-1]);
 }
 
-//****************************************************************************
 
 
+//**********************Voted ensemble function********************************************************************
 
-//**********************function of voted ensemble****************************
-
-//we use pred as an input.
 function mode(array)
 {
     if(array.length == 0)
@@ -143,9 +136,11 @@ function mode(array)
 }
 
 //output voting ensemble
-console.log("Final result:   "+mode(pred)+"\n");
+console.log("\n"+"Traffic result:   "+mode(pred)+"\n");
 });
-//****************************************************************************
+
+
+//*************************Time converter (millisec to min&sec)*****************************************************
 
 //time converter
 function millisToMinutesAndSeconds(millis) {
@@ -155,26 +150,24 @@ function millisToMinutesAndSeconds(millis) {
 }
 
 
-
-//************************************************************************************************
-
-
-
-//end stopwatch
+//*************************Time log function**************************************************************************
 setTimeout(function (argument) {
     // execution time simulated with setTimeout function
     var end = new Date() - start,
         hrend = process.hrtime(hrstart);
 
 	
+	throughput();
 	console.log("Execution time:    "+millisToMinutesAndSeconds(end));
-
+	
 
     //console.info("Execution time: %dms", end);
     //console.info("Execution time (hr): %ds %dms", hrend[0]/3600, hrend[1]/1000000);
 }, 1);
 
 
+
 };
+//function call to export module.
 module.exports.RFC=RFC;
 
