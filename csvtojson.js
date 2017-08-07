@@ -1,6 +1,3 @@
-
-
-
 // require csvtojson npm
 var csv = require("csvtojson");
 var jsonfile = require('jsonfile');
@@ -9,16 +6,12 @@ var fs = require('fs');
 //input data, import data from WNA, for training data it is located in local folder.
 //const csvFilePath1='../WNA/view/data/subtype.csv'
 //const csvFilePath2='./data/training data/trainingdata.csv'
-
-
 //const jsonFilePath1='./subtype.json'
 //const jsonFilePath2='./trainingdata.json'
 
 
 
 //This function is a csvtojson converter to feed the input into RFC function.
-
-
 
 //make sure to call event in csv to exclude first column "time" because we don't need time to be fed in RFC
 
@@ -30,10 +23,21 @@ var csv = require("csvtojson");
 var jsonfile = require('jsonfile');
 var fs = require('fs');
 
-//ignore first column option.
-csv({ignoreColumns: [0]})
+
+//use to identify two condition, because throughput does not need to remove first line
+var ignore_cond;
+if(Pathnumber==1||Pathnumber==2)
+{
+ignore_cond={ignoreColumns: [0]};
+}
+if(Pathnumber==3)
+{
+ignore_cond="";
+}
 
 
+
+csv(ignore_cond)
 
 //load an input based on filepath declaration above
 .fromFile(csvFilePath)
@@ -56,6 +60,11 @@ csv({ignoreColumns: [0]})
 			jsonoutput = './data/json/trainingdata.json';
 			console.log("Training data imported");
 			}
+		if(Pathnumber==3){
+			jsonoutput = './data/json/throughputdata.json';
+			console.log("Throughput data imported");
+			}
+
 
 		jsonfile.writeFile(jsonoutput, jsonArrayObj, function(err) {
 		    if(err) {
