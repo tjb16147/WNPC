@@ -1,132 +1,37 @@
-## Random Forest
+## WNPC - Wireless Network Pattern Classifier
 
-A random forest classifier. A random forest is a meta estimator that fits a number of decision tree classifiers on various sub-samples of the dataset and use averaging to improve the predictive accuracy and control over-fitting.
+Wireless Network Pattern Classifier is a data processing software use to estimate a wireless network congestion and traffic by using a Random Forest Classifier as a supervised learning to let the machine automatically generate out a result.
 
-Modeled after [scikit-learn's RandomForestClassifier](http://scikit-learn.org/dev/modules/generated/sklearn.ensemble.RandomForestClassifier.html).
+This application is an enhancement application for Wireless Network Analyzer project from: https://github.com/GuytChome/WNA.
+A RFC script we use in this application comes from: https://github.com/jessfraz/random-forest-classifier
+
 
 ### Installation
+
+1. Install WNA by using based on a guide from https://github.com/GuytChome/WNA
+2. Download this project and extract it into a home directory.
+3. Install necessary npm listed below.
+
 ```bash
-$ npm install random-forest-classifier
+$ cd WNPC
+$ sudo npm install random-forest-classifier
+$ sudo npm install --save jsonfile
+$ sudo npm i --save csvtojson
+$ sudo npm install --save delay
+
+
+
 ```
 
-### Example
 
-```javascript
-var fs = require('fs'),
-    RandomForestClassifier = require('random-forest-classifier').RandomForestClassifier;
-
-var data = [
-  {
-    "length":5.1,
-    "width":3.5,
-    "petal_length":1.4,
-    "petal_width":0.2,
-    "species":"setosa"
-  },
-  {
-    "length":6.5,
-    "width":3,
-    "petal_length":5.2,
-    "petal_width":2,
-    "species":"virginica"
-  },
-  {
-    "length":6.6,
-    "width":3,
-    "petal_length":4.4,
-    "petal_width":1.4,
-    "species":"versicolor"
-  }...
-];
-
-var testdata = [{
-    "length":6.3,
-    "width":2.5,
-    "petal_length":5,
-    "petal_width":1.9,
-    //"species":"virginica"
-  },
-  {
-    "length":4.7,
-    "width":3.2,
-    "petal_length":1.3,
-    "petal_width":0.2,
-    //"species":"setosa"
-  }...
-];
-
-var rf = new RandomForestClassifier({
-    n_estimators: 10
-});
-
-rf.fit(data, null, "species", function(err, trees){
-  //console.log(JSON.stringify(trees, null, 4));
-  var pred = rf.predict(testdata, trees);
-
-  console.log(pred);
-
-  // pred = ["virginica", "setosa"]
-});
-```
 
 ### Usage
 
-#### Options
+To run an application, run main.js in folder via terminal after finish capturing packet frames from WNA.
 
-**`n_estimators`:** *integer, optional (default=10)* The number of trees in the forest.
-
-**example**
-
-```javascript
-var rf = new RandomForestClassifier({
-    n_estimators: 20
-});
+```bash
+$ cd WNPC
+$ node main.js
 ```
-
-##### `rf.fit(data, features, target, function(err, trees){})`
-
-Build a forest of trees from the training set (data, features, target).
-
-**parameters**
-
-- **`data`**: training data array
-- **`features`**: if `null` it defaults to all features except the target, otherwise it only uses the array of features passed
-- **`target`**: the target feature
-
-**example**
-```javascript
-var rf = new RandomForestClassifier({
-    n_estimators: 20
-});
-
-rf.fit(data, ["length", "width"], "species", function(err, trees){
-  console.log(JSON.stringify(trees, null, 4));
-});
-```
-
-##### `rf.predict(data, trees)`
-
-The predicted class of an input sample is computed as the majority prediction of the trees in the forest.
-
-**parameters**
-
-- **`data`**: input sample
-- **`trees`**: the forest of trees outputted by `rf.fit`
-
-**example**
-```javascript
-var rf = new RandomForestClassifier({
-    n_estimators: 20
-});
-
-rf.fit(data, ["length", "width"], "species", function(err, trees){
-
-  var pred = rf.predict(sample_data, trees);
-
-  console.log(pred);
-  // pred = ["virginica", "setosa"]
-});
-```
-
 
 
