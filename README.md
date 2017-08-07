@@ -10,7 +10,12 @@ A RFC script we use in this application comes from: https://github.com/jessfraz/
 ### Installation
 
 1. Install WNA by using based on a guide from https://github.com/GuytChome/WNA
-2. Download this project and extract it into a home directory.
+2. Download this project and extract it into a home directory or clone this repository by using this code.
+
+```bash
+$ git clone https://github.com/tjb16147/WNPC.git
+```
+
 3. Install necessary npm listed below.
 
 ```bash
@@ -19,9 +24,6 @@ $ sudo npm install random-forest-classifier
 $ sudo npm install --save jsonfile
 $ sudo npm i --save csvtojson
 $ sudo npm install --save delay
-
-
-
 ```
 
 
