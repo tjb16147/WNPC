@@ -5,10 +5,14 @@ Wireless Network Pattern Classifier is a data processing software use to estimat
 This application is an enhancement application for Wireless Network Analyzer project from: https://github.com/GuytChome/WNA.
 
 List of other packages we import and use in this project.
-1.csvtojson 	Publisher:keyang, 	from:https://www.npmjs.com/package/csvtojson
-2.delay		Publisher:sindresorhus, from:https://www.npmjs.com/package/delay
-3.jsonfile	Publisher:ryanzim,	from:https://www.npmjs.com/package/jsonfile
-4.RFC		Publisher:Jessfraz,	from:https://github.com/jessfraz/random-forest-classifier
+
+1.csvtojson 	Publisher:keyang, 	from:https://www.npmjs.com/package/csvtojson.
+
+2.delay		Publisher:sindresorhus, from:https://www.npmjs.com/package/delay.
+
+3.jsonfile	Publisher:ryanzim,	from:https://www.npmjs.com/package/jsonfile.
+
+4.RFC		Publisher:Jessfraz,	from:https://github.com/jessfraz/random-forest-classifier.
 
 
 ### Installation
